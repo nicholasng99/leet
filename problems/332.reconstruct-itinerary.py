@@ -7,17 +7,16 @@
 # @lc code=start
 from collections import OrderedDict
 
-def nextLocation(self, FULL_TICKET):
-    key = FULL_TICKET[0:3]
-    for ticket in self.map:
-        if key == ticket[0:3]:
-            key = ticket
-            break
-    if self.map[key] == 1:
-        self.map.pop(key)
-    else:
-        self.map[key] -= 1
-    return key[3:6]
+def search(self, key):
+    print(key)
+    print(self.map)
+    if key in self.map:
+        destinations = self.map[key]
+        while len(destinations) > 0:
+            value = destinations[0]
+            destinations.pop(0)
+            search(self, value)
+    self.result.append(key)
             
 class Solution(object):
     def findItinerary(self, tickets):
@@ -27,21 +26,19 @@ class Solution(object):
         """
         self.map = {}
         for ticket in tickets:
-            FULL_TICKET = str(ticket[0] + ticket[1])
-            self.map[FULL_TICKET] = 1 if FULL_TICKET not in self.map else self.map[FULL_TICKET] + 1
-
+            key = str(ticket[0])
+            if key not in self.map:
+                self.map[key] = []
+            self.map[key].append(str(ticket[1]))
+        for key, value in self.map.items():
+            self.map[key] = sorted(value)
         self.map = OrderedDict(sorted(self.map.items()))
 
-        print(self.map)
-
-        resultList = []
-        key = "JFK"
-        resultList.append(key)
-        while len(self.map) > 0:
-            nextKey = nextLocation(self, key)
-            resultList.append(nextKey)
-            key = nextKey
-        return resultList
+        self.result = []
+        initialKey = "JFK"
+        search(self, initialKey)
+        self.result.reverse()
+        return self.result
         
         
 # @lc code=end
