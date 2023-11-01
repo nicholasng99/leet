@@ -5,17 +5,22 @@
  */
 
 // @lc code=start
-#include <set>
+#include <vector>
 
 class Solution {
 public:
     int firstMissingPositive(std::vector<int>& nums) {
-        std::set<int> numbersSet;
-        for (int i = 0; i < nums.size() + 1; ++i)
-            numbersSet.insert(i + 1);
-        for (auto& num : nums)
-                numbersSet.erase(num);
-        return *numbersSet.begin();
+        const auto size = nums.size();
+        std::vector<bool> numbers(size, false);
+        for (auto& num : nums) {
+            if (num < 1 || num > size)
+                continue;
+            numbers[num - 1] = true;
+        }
+        for (int i=0; i<size; ++i)
+            if (!numbers[i])
+                return i + 1;
+        return size + 1;
     }
 };
 // @lc code=end
