@@ -16,14 +16,14 @@ public:
     double findMaxAverage(vector<int> &nums, int k)
     {
         double windowSum = 0;
-        double maxAverage = -numeric_limits<double>::max();
-        for (int i = 0; i < nums.size(); ++i)
+        for (int i = 0; i < k; ++i)
+            windowSum += nums[i];
+        double maxAverage = windowSum / k;
+        for (int i = k; i < nums.size(); ++i)
         {
             windowSum += nums[i];
-            if (i >= k)
-                windowSum -= nums[i - k];
-            if (i >= k - 1)
-                maxAverage = std::max(maxAverage, windowSum / k);
+            windowSum -= nums[i - k];
+            maxAverage = max(maxAverage, windowSum / k);
         }
         return maxAverage;
     }
